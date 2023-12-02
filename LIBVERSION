@@ -1,0 +1,9 @@
+#Library version
+MAJORLIBVER = 1
+MINORLIBVER = 0
+PATCHLIBVER = 0
+
+# version history
+# -----------------------------------------------------------------------------
+# 20230123 1.0.0 : 1st Release Version. coral - renewal coral
+# -----------------------------------------------------------------------------
