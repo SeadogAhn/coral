@@ -1,5 +1,5 @@
 #Directory declaration
-MAINDIR = $(CORAL_HOME)
+MAINDIR = $(USER_HOME)
 PGMDIR = $(MAINDIR)/bin
 LIBDIR = $(MAINDIR)/lib
 INCDIR = $(MAINDIR)/include
@@ -18,9 +18,9 @@ CXXSTD = -std=c++1y
 EXECUTE =
 #Compiler optimize level option
 ifeq ($(EXECUTE), DEBUG)
-    DEBUGFLAG = -g -D_DEBUG -D__linux__
+    DEBUGFLAG = -g -D_DEBUG -D__linux__ -D_GLIBCXX_USE_CXX11_ABI
 else
-    DEBUGFLAG = -O2 -D__linux__
+    DEBUGFLAG = -O2 -D__linux__ -D_GLIBCXX_USE_CXX11_ABI
 endif
 
 #gprof Profiler option
@@ -44,8 +44,10 @@ else
 endif
 
 # include & lib path
-IFLAGS   = -I. -I$(INCDIR) -I$(USER_HOME)/include -I$(ORACLE_INC) -I$(II_API_INC)
-LFLAGS   = -L. -L$(LIBDIR) -L$(USER_HOME)/lib -L$(ORACLE_LIB) -L$(II_API_LIB) -lpthread -lm -lc -lcrypt -ldl -lingres -lrt -lgcc_s -lclntsh -locci -lcurl
+#IFLAGS   = -I. -I$(INCDIR) -I$(USER_HOME)/include -I$(ORACLE_INC) -I$(II_API_INC)
+IFLAGS   = -I. -I$(INCDIR) -I$(USER_HOME)/include -I$(ORACLE_INC)
+#LFLAGS   = -L. -L$(LIBDIR) -L$(USER_HOME)/lib -L$(ORACLE_LIB) -L$(II_API_LIB) -lpthread -lm -lc -lcrypt -ldl -lingres -lrt -lgcc_s -lclntsh -locci -lcurl
+LFLAGS   = -L. -L$(LIBDIR) -L$(USER_HOME)/lib -L$(ORACLE_LIB) -lpthread -lm -lc -lclntsh -locci -lcurl
 
 #orther option
 REMOVE    = rm -rf
