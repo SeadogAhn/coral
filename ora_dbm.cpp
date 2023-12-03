@@ -91,33 +91,35 @@ void coral::ora_dbm::execute_query(const std::string& query) {
     std::ostringstream method_info;
     method_info << CORAL_D_METHOD_INFO << "():";
 
+    oracle::occi::Statement* statement_p = nullptr;   ///< oracle statement
+
     try {
-        statement_p_ = connection_p_->createStatement(query);
-        statement_p_->executeUpdate();
+        statement_p = connection_p_->createStatement(query);
+        statement_p->executeUpdate();
     }
     catch (oracle::occi::SQLException& error) {
-        if (statement_p_) connection_p_->terminateStatement (statement_p_);
+        if (statement_p) connection_p_->terminateStatement (statement_p);
         coral::print_string(log_message, 1024, "Error number:%d:%s", error.getErrorCode(), error.getMessage().substr(0, error.getMessage().size()-1).c_str());
         coral::log_manager::write(gv_app_name, method_info.str() + log_message);
         throw database_error(log_message);
     }
     catch (coral::exception& error) {
-        if (statement_p_) connection_p_->terminateStatement (statement_p_);
+        if (statement_p) connection_p_->terminateStatement (statement_p);
         coral::log_manager::write(gv_app_name, method_info.str() + error.what());
         throw error;
     }
     catch (std::exception& error) {
-        if (statement_p_) connection_p_->terminateStatement (statement_p_);
+        if (statement_p) connection_p_->terminateStatement (statement_p);
         coral::log_manager::write(gv_app_name, method_info.str() + error.what());
         throw error;
     }
     catch (...) {
-        if (statement_p_) connection_p_->terminateStatement (statement_p_);
+        if (statement_p) connection_p_->terminateStatement (statement_p);
         coral::log_manager::write(gv_app_name, method_info.str() + CORAL_D_STRMSG(EN, ERR, 000010));
         throw unknown_error(CORAL_D_STRMSG(EN, ERR, 000010));
     }
 
-    if (statement_p_) connection_p_->terminateStatement (statement_p_);
+    if (statement_p) connection_p_->terminateStatement (statement_p);
     coral::print_string(log_message, 1024, "Message:%s,ElapsedTime:%.6lf", CORAL_D_STRMSG(EN, STR, 000004), et.sec());
     coral::log_manager::write(gv_app_name, method_info.str() + log_message);
     CORAL_D_CLASS_MEMBER_FUNC_END;
@@ -133,40 +135,43 @@ void coral::ora_dbm::execute_query(const std::string& query, coral::db_data_set_
     std::ostringstream method_info;
     method_info << CORAL_D_METHOD_INFO << "():";
 
+    oracle::occi::Statement*    statement_p   = nullptr;   ///< oracle statement
+    oracle::occi::ResultSet*    resultset_p   = nullptr;   ///< oracle resultset
+
     try {
-        statement_p_ = connection_p_->createStatement(query);
-        statement_p_->executeQuery();
-        resultset_p_ = statement_p_->getResultSet();
-        get_result(*resultset_p_, db_data_set);
+        statement_p = connection_p_->createStatement(query);
+        statement_p->executeQuery();
+        resultset_p = statement_p->getResultSet();
+        get_result(*resultset_p, db_data_set);
     }
     catch (oracle::occi::SQLException& error) {
-        if (resultset_p_) statement_p_->closeResultSet (resultset_p_);
-        if (statement_p_) connection_p_->terminateStatement (statement_p_);
+        if (resultset_p) statement_p->closeResultSet (resultset_p);
+        if (statement_p) connection_p_->terminateStatement (statement_p);
         coral::print_string(log_message, 1024, "Error number:%d:%s", error.getErrorCode(), error.getMessage().substr(0, error.getMessage().size()-1).c_str());
         coral::log_manager::write(gv_app_name, method_info.str() + log_message);
         throw database_error(log_message);
     }
     catch (coral::exception& error) {
-        if (resultset_p_) statement_p_->closeResultSet (resultset_p_);
-        if (statement_p_) connection_p_->terminateStatement (statement_p_);
+        if (resultset_p) statement_p->closeResultSet (resultset_p);
+        if (statement_p) connection_p_->terminateStatement (statement_p);
         coral::log_manager::write(gv_app_name, method_info.str() + error.what());
         throw error;
     }
     catch (std::exception& error) {
-        if (resultset_p_) statement_p_->closeResultSet (resultset_p_);
-        if (statement_p_) connection_p_->terminateStatement (statement_p_);
+        if (resultset_p) statement_p->closeResultSet (resultset_p);
+        if (statement_p) connection_p_->terminateStatement (statement_p);
         coral::log_manager::write(gv_app_name, method_info.str() + error.what());
         throw error;
     }
     catch (...) {
-        if (resultset_p_) statement_p_->closeResultSet (resultset_p_);
-        if (statement_p_) connection_p_->terminateStatement (statement_p_);
+        if (resultset_p) statement_p->closeResultSet (resultset_p);
+        if (statement_p) connection_p_->terminateStatement (statement_p);
         coral::log_manager::write(gv_app_name, method_info.str() + CORAL_D_STRMSG(EN, ERR, 000010));
         throw unknown_error(CORAL_D_STRMSG(EN, ERR, 000010));
     }
 
-    if (resultset_p_) statement_p_->closeResultSet (resultset_p_);
-    if (statement_p_) connection_p_->terminateStatement (statement_p_);
+    if (resultset_p) statement_p->closeResultSet (resultset_p);
+    if (statement_p) connection_p_->terminateStatement (statement_p);
     coral::print_string(log_message, 1024, "Message:%s,ElapsedTime:%.6lf", CORAL_D_STRMSG(EN, STR, 000004), et.sec());
     coral::log_manager::write(gv_app_name, method_info.str() + log_message);
     CORAL_D_CLASS_MEMBER_FUNC_END;
@@ -212,40 +217,43 @@ void coral::ora_dbm::execute_query(const std::string& query, coral::db_any_data_
     std::ostringstream method_info;
     method_info << CORAL_D_METHOD_INFO << "():";
 
+    oracle::occi::Statement* statement_p = nullptr;   ///< oracle statement
+    oracle::occi::ResultSet* resultset_p = nullptr;   ///< oracle resultset
+
     try {
-        statement_p_ = connection_p_->createStatement(query);
-        statement_p_->executeQuery();
-        resultset_p_ = statement_p_->getResultSet();
-        get_result(*resultset_p_, db_any_data_set);
+        statement_p = connection_p_->createStatement(query);
+        statement_p->executeQuery();
+        resultset_p = statement_p->getResultSet();
+        get_result(*resultset_p, db_any_data_set);
     }
     catch (oracle::occi::SQLException& error) {
-        if (resultset_p_) statement_p_->closeResultSet (resultset_p_);
-        if (statement_p_) connection_p_->terminateStatement (statement_p_);
+        if (resultset_p) statement_p->closeResultSet (resultset_p);
+        if (statement_p) connection_p_->terminateStatement (statement_p);
         coral::print_string(log_message, 1024, "Error number:%d:%s", error.getErrorCode(), error.getMessage().substr(0, error.getMessage().size()-1).c_str());
         coral::log_manager::write(gv_app_name, method_info.str() + log_message);
         throw database_error(log_message);
     }
     catch (coral::exception& error) {
-        if (resultset_p_) statement_p_->closeResultSet (resultset_p_);
-        if (statement_p_) connection_p_->terminateStatement (statement_p_);
+        if (resultset_p) statement_p->closeResultSet (resultset_p);
+        if (statement_p) connection_p_->terminateStatement (statement_p);
         coral::log_manager::write(gv_app_name, method_info.str() + error.what());
         throw error;
     }
     catch (std::exception& error) {
-        if (resultset_p_) statement_p_->closeResultSet (resultset_p_);
-        if (statement_p_) connection_p_->terminateStatement (statement_p_);
+        if (resultset_p) statement_p->closeResultSet (resultset_p);
+        if (statement_p) connection_p_->terminateStatement (statement_p);
         coral::log_manager::write(gv_app_name, method_info.str() + error.what());
         throw error;
     }
     catch (...) {
-        if (resultset_p_) statement_p_->closeResultSet (resultset_p_);
-        if (statement_p_) connection_p_->terminateStatement (statement_p_);
+        if (resultset_p) statement_p->closeResultSet (resultset_p);
+        if (statement_p) connection_p_->terminateStatement (statement_p);
         coral::log_manager::write(gv_app_name, method_info.str() + CORAL_D_STRMSG(EN, ERR, 000010));
         throw unknown_error(CORAL_D_STRMSG(EN, ERR, 000010));
     }
 
-    if (resultset_p_) statement_p_->closeResultSet (resultset_p_);
-    if (statement_p_) connection_p_->terminateStatement (statement_p_);
+    if (resultset_p) statement_p->closeResultSet (resultset_p);
+    if (statement_p) connection_p_->terminateStatement (statement_p);
     coral::print_string(log_message, 1024, "Message:%s,ElapsedTime:%.6lf", CORAL_D_STRMSG(EN, STR, 000004), et.sec());
     coral::log_manager::write(gv_app_name, method_info.str() + log_message);
     CORAL_D_CLASS_MEMBER_FUNC_END;

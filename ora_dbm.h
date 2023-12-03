@@ -85,8 +85,6 @@ namespace coral {
 
         oracle::occi::Environment*  environment_p_ = nullptr;   ///< oracle environment
         oracle::occi::Connection*   connection_p_  = nullptr;   ///< oracle connection
-        oracle::occi::Statement*    statement_p_   = nullptr;   ///< oracle statement
-        oracle::occi::ResultSet*    resultset_p_   = nullptr;   ///< oracle resultset
 
         /*! get a string from converted column value in ResultSet
             \param rst ResultSet
